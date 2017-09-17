@@ -1,18 +1,26 @@
-from telegram.ext import Updater, CommandHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-def start(bot, update): #Replies 'Hello World' as a reply to /start
-    update.message.reply_text('Hello World!')
+
+def echo(bot, update): #Replies 'Hello World' as a reply to /start
+    update.message.reply_text(update.message.text)
 
 def hello(bot, update): #Replies 'Hello {User first name} as a reply to /hello'
     update.message.reply_text(
         'Hello {}'.format(update.message.from_user.first_name))
 
-chat_id = bot.get_updates()[-1].message.chat_id #Required for replying to the user and other functions
 
-updater = Updater('your API key')
+def main():
 
-updater.dispatcher.add_handler(CommandHandler('start', start))
-updater.dispatcher.add_handler(CommandHandler('hello', hello))
+    updater = Updater('448790793:AAGq7aTyr2VmXTlu6R4pK3VMUSEPoAqfX80')
 
-updater.start_polling()
-updater.idle()
+
+    updater.dispatcher.add_handler(CommandHandler('echo', echo))
+    updater.dispatcher.add_handler(CommandHandler('hello', hello))
+
+    updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))
+
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
